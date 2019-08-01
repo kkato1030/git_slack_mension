@@ -86,7 +86,7 @@ def get_target_prefix(github_event, action):
     prefix : string
         bodyから文章やURLを取得するためのprefix
     """
-    if action in ('created', 'opend', 'edited'):
+    if action in ('created', 'opened', 'edited'):
         if github_event == 'pull_request':
             return 'pull_request'
 
