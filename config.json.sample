@@ -1,0 +1,6 @@
+{
+  "mension": {
+    "<github_username>": "<slack_id>"
+  },
+  "webhook_url": "https://hooks.slack.com/services/xxxxxxxxxx/xxxxxxxxxxx/xxxxxxxxxx"
+}

@@ -1,0 +1,22 @@
+service: git-slack-mension
+
+provider:
+  name: aws
+  runtime: python3.7
+  region: ap-northeast-1
+
+package:
+  exclude:
+  - Pipfile
+  - node_modules/**
+  - package-lock.json
+  - serverless.yml
+
+functions:
+  mension:
+    handler: handler.main
+    events:
+      - http:
+          path: mension/send
+          method: post
+
