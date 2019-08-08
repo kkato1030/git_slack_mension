@@ -1,0 +1,24 @@
+{
+  "name": "git_slack_mension",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "serverless": "^1.49.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/kkato1030/git_slack_mension.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kkato1030/git_slack_mension/issues"
+  },
+  "homepage": "https://github.com/kkato1030/git_slack_mension#readme"
+}
