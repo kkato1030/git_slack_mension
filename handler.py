@@ -117,9 +117,8 @@ def send_slack(message):
     }
     method = 'POST'
     data = {
-        'username': 'gitslack',
+        'username': 'nuko',
         'text': message,
-        'icon_emoji': ':octocat'
     }
     json_data = json.dumps(data).encode('utf-8')
     req = request.Request(
