@@ -8,8 +8,10 @@ from urllib import request
 with open('./config.json') as f:
     data = f.read()
     config = json.loads(data)
-    mension_list = config['mension']
-    webhook_url = config['webhook_url']
+
+mension_list = config['mension']
+group = config['group']
+webhook_url = config['webhook_url']
 
 
 def main(event=None, context=None):
@@ -17,28 +19,36 @@ def main(event=None, context=None):
 
     github_event = event['headers']['X-GitHub-Event']
     body = json.loads(event['body'])
+    action = body['action']
 
-    prefix = get_target_prefix(github_event, body['action'])
+    prefix = get_target_prefix(github_event, action)
     html_url = body[prefix]['html_url']
-    target_text = body[prefix]['body']
-    print('[INFO]', 'target_text:', target_text)
 
-    github_ids = get_github_ids(target_text)
-    if not len(github_ids):
-        return {
-            'statusCode': 200,
-            'body': 'pass through',
-        }
+    if is_pr_opened(github_event, action):
+        message = f"""<!subteam^{group}>
+Pull Request is opened! check it out!
+{html_url}
+"""
+    else:
+        target_text = body[prefix]['body']
+        print('[INFO]', 'target_text:', target_text)
 
-    slack_ids = get_slack_ids(github_ids)
-    if not len(slack_ids):
-        return {
-            'statusCode': 200,
-            'body': 'pass through',
-        }
+        github_ids = get_github_ids(target_text)
+        if not len(github_ids):
+            return {
+                'statusCode': 200,
+                'body': 'pass through',
+            }
 
-    slack_mension = ' '.join(map(get_slack_mension, slack_ids))
-    message = f"""{slack_mension}
+        slack_ids = get_slack_ids(github_ids)
+        if not len(slack_ids):
+            return {
+                'statusCode': 200,
+                'body': 'pass through',
+            }
+
+        slack_mension = ' '.join(map(get_slack_mension, slack_ids))
+        message = f"""{slack_mension}
 You are mensioned in {github_event}.
 {html_url}
 """
@@ -68,6 +78,10 @@ def get_github_ids(text):
     regex = '@[A-Za-z0-9-/]+'
 
     return re.findall(regex, text)
+
+
+def is_pr_opened(github_event, action):
+    return github_event == 'pull_request' and action == 'opened'
 
 
 def get_target_prefix(github_event, action):
