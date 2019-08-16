@@ -100,12 +100,15 @@ def get_target_prefix(github_event, action):
     prefix : string
         bodyから文章やURLを取得するためのprefix
     """
-    if action in ('created', 'opened', 'edited'):
+    if action in ('created', 'opened', 'submitted', 'edited'):
         if github_event == 'pull_request':
             return 'pull_request'
 
         if github_event == 'issues':
             return 'issue'
+
+        if github_event == 'pull_request_review':
+            return 'review'
 
         if github_event in ('issue_comment', 'pull_request_review_comment'):
             return 'comment'
@@ -131,9 +134,8 @@ def send_slack(message):
     }
     method = 'POST'
     data = {
-        'username': 'gitslack',
+        'username': 'nuko',
         'text': message,
-        'icon_emoji': ':octocat'
     }
     json_data = json.dumps(data).encode('utf-8')
     req = request.Request(
