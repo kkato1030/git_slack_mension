@@ -19,7 +19,13 @@ def main(event=None, context=None):
 
     github_event = event['headers']['X-GitHub-Event']
     body = json.loads(event['body'])
-    action = body['action']
+    action = body.get('action')
+
+    if action is None:
+        return {
+            'statusCode': 200,
+            'body': 'pass through'
+        }
 
     prefix = get_target_prefix(github_event, action)
     html_url = body[prefix]['html_url']
